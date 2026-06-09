@@ -11,6 +11,8 @@ format:
     downloads: [pdf]
     css: styles.css
     toc: true
+    date-modified: last-modified
+    date-modified-title: "Analysis last updated: "
 
 execute:
   warning: false
