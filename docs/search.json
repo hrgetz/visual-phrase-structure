@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "visual-phrase-structure",
+    "section": "",
+    "text": "Here are our notes:\n\nSummary of experiments we will publish\nAll experiments\n\n\n\nHere are the experiments we’re going to publish, with Ns. A few Ns are different. from what’s in our summary sheets because I discovered that a couple of participants were run in multiple experiments. I removed data for all but the first experiment they participated in.\n\n\n\n\n\n\n\n\n\n\n\n\nexperiment\nname\nversions\nPhrase-structure\nControl\n\n\n\n\nExperiment 1\nFlying shapes, 1-shape window\nv1\n37\n30\n\n\nExperiment 1\nFlying shapes, 2-shape window\nv4\n24\n29\n\n\nExperiment 2\nBase pairs, static, complete grid\nv12, v13\n26\n0\n\n\nExperiment 2\nBase pairs, static, limited grid\nv20\n40\n0\n\n\nExperiment 3\nBase pairs, phrase-by-phrase\nv18\n39\n40"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html#defining-good-learners",
+    "href": "index.html#defining-good-learners",
+    "title": "visual-phrase-structure",
+    "section": "",
+    "text": "Throughout the project, we’ve looked at results for everyone combined and also only for “good learners”, defined as people who surpassed a certain threshold on the phrase test. We thought this was necessary because we didn’t always have an attention check built into the paradigm.\nHere, I’ve defined the threshold for “good learners” as a score of ≥ 0.7 on the phrase test.\n\n\n\n\n\n\n\n\n\n\n\n\n\nname\ncondition\nversions\ngood\nnot_good\ngood_proportion\n\n\n\n\nFlying shapes, 1-shape window\nPhrase-structure\nv1\n25\n12\n0.6756757\n\n\nFlying shapes, 1-shape window\nControl\nv1\n8\n22\n0.2666667\n\n\nFlying shapes, 2-shape window\nPhrase-structure\nv4\n17\n7\n0.7083333\n\n\nFlying shapes, 2-shape window\nControl\nv4\n8\n21\n0.2758621\n\n\nBase pairs, static, complete grid\nPhrase-structure\nv12, v13\n12\n14\n0.4615385\n\n\nBase pairs, static, limited grid\nPhrase-structure\nv20\n17\n23\n0.4250000\n\n\nBase pairs, phrase-by-phrase\nPhrase-structure\nv18\n16\n23\n0.4102564\n\n\nBase pairs, phrase-by-phrase\nControl\nv18\n18\n22\n0.4500000"
+  },
+  {
+    "objectID": "index.html#ns",
+    "href": "index.html#ns",
+    "title": "visual-phrase-structure",
+    "section": "",
+    "text": "Here are the experiments we’re going to publish, with Ns. A few Ns are different. from what’s in our summary sheets because I discovered that a couple of participants were run in multiple experiments. I removed data for all but the first experiment they participated in.\n\n\nCode\ndata %&gt;% select(experiment, name, version_combined, condition, participant) %&gt;%\n  unique()%&gt;%\n  group_by(experiment, name, condition)%&gt;%\n  summarise(\n    versions = paste(sort(unique(version_combined)), collapse = \", \"),\n    n = n_distinct(participant),\n    .groups = \"drop\")%&gt;%\n  pivot_wider(\n    names_from = condition, \n    values_from = n,\n    values_fill = 0)%&gt;%\n  arrange(experiment) %&gt;%\n  kable()\n\n\n\n\n\n\n\n\n\n\n\n\nexperiment\nname\nversions\nPhrase-structure\nControl\n\n\n\n\nExperiment 1\nFlying shapes, 1-shape window\nv1\n37\n30\n\n\nExperiment 1\nFlying shapes, 2-shape window\nv4\n24\n29\n\n\nExperiment 2\nBase pairs, static, complete grid\nv12, v13\n26\n0\n\n\nExperiment 2\nBase pairs, static, limited grid\nv20\n40\n0\n\n\nExperiment 3\nBase pairs, phrase-by-phrase\nv18\n39\n40"
+  },
+  {
+    "objectID": "index.html#ns-by-experiment",
+    "href": "index.html#ns-by-experiment",
+    "title": "visual-phrase-structure",
+    "section": "",
+    "text": "Here are the experiments we’re going to publish, with Ns. A few Ns are different. from what’s in our summary sheets because I discovered that a couple of participants were run in multiple experiments. I removed data for all but the first experiment they participated in.\n\n\n\n\n\n\n\n\n\n\n\n\nexperiment\nname\nversions\nPhrase-structure\nControl\n\n\n\n\nExperiment 1\nFlying shapes, 1-shape window\nv1\n37\n30\n\n\nExperiment 1\nFlying shapes, 2-shape window\nv4\n24\n29\n\n\nExperiment 2\nBase pairs, static, complete grid\nv12, v13\n26\n0\n\n\nExperiment 2\nBase pairs, static, limited grid\nv20\n40\n0\n\n\nExperiment 3\nBase pairs, phrase-by-phrase\nv18\n39\n40"
+  },
+  {
+    "objectID": "index.html#good-learners",
+    "href": "index.html#good-learners",
+    "title": "visual-phrase-structure",
+    "section": "Good learners",
+    "text": "Good learners\n\nDefining “good learners”\nThroughout the project, we’ve looked at results for everyone combined and also only for “good learners”, defined as people who surpassed a certain threshold on the phrase test. We thought this was necessary because we didn’t always have an attention check built into the paradigm.\nHere, I’ve defined the threshold for “good learners” as a score of ≥ 0.7 on the phrase test.\n\n\n\n\n\n\n\n\n\n\n\n\n\nname\ncondition\nversions\ngood\nnot_good\ngood_proportion\n\n\n\n\nFlying shapes, 1-shape window\nPhrase-structure\nv1\n25\n12\n0.6756757\n\n\nFlying shapes, 1-shape window\nControl\nv1\n8\n22\n0.2666667\n\n\nFlying shapes, 2-shape window\nPhrase-structure\nv4\n17\n7\n0.7083333\n\n\nFlying shapes, 2-shape window\nControl\nv4\n8\n21\n0.2758621\n\n\nBase pairs, static, complete grid\nPhrase-structure\nv12, v13\n12\n14\n0.4615385\n\n\nBase pairs, static, limited grid\nPhrase-structure\nv20\n17\n23\n0.4250000\n\n\nBase pairs, phrase-by-phrase\nPhrase-structure\nv18\n16\n23\n0.4102564\n\n\nBase pairs, phrase-by-phrase\nControl\nv18\n18\n22\n0.4500000"
+  },
+  {
+    "objectID": "index.html#by-version",
+    "href": "index.html#by-version",
+    "title": "visual-phrase-structure",
+    "section": "By Version",
+    "text": "By Version\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nname\ncondition\nsession\ntest\ngroup_mean\nn\nsd\nse\n\n\n\n\nFlying shapes, 1-shape window\nPhrase-structure\n1\nphrase\n0.73\n37\n0.20\n0.03\n\n\nFlying shapes, 1-shape window\nPhrase-structure\n2\nphrase\n0.79\n37\n0.23\n0.04\n\n\nFlying shapes, 1-shape window\nPhrase-structure\n2\nsentence\n0.73\n37\n0.19\n0.03\n\n\nFlying shapes, 1-shape window\nControl\n1\nphrase\n0.55\n29\n0.16\n0.03\n\n\nFlying shapes, 1-shape window\nControl\n2\nphrase\n0.56\n29\n0.21\n0.04\n\n\nFlying shapes, 1-shape window\nControl\n2\nsentence\n0.59\n29\n0.14\n0.03\n\n\nFlying shapes, 2-shape window\nPhrase-structure\n1\nphrase\n0.76\n23\n0.22\n0.05\n\n\nFlying shapes, 2-shape window\nPhrase-structure\n2\nphrase\n0.80\n23\n0.19\n0.04\n\n\nFlying shapes, 2-shape window\nPhrase-structure\n2\nsentence\n0.71\n23\n0.18\n0.04\n\n\nFlying shapes, 2-shape window\nControl\n1\nphrase\n0.50\n29\n0.21\n0.04\n\n\nFlying shapes, 2-shape window\nControl\n2\nphrase\n0.59\n29\n0.15\n0.03\n\n\nFlying shapes, 2-shape window\nControl\n2\nsentence\n0.60\n29\n0.15\n0.03\n\n\nBase pairs, static, complete grid\nPhrase-structure\n2\nphrase\n0.70\n26\n0.21\n0.04\n\n\nBase pairs, static, complete grid\nPhrase-structure\n2\nsentence\n0.62\n26\n0.17\n0.03\n\n\nBase pairs, static, limited grid\nPhrase-structure\n2\nphrase\n0.66\n40\n0.19\n0.03\n\n\nBase pairs, static, limited grid\nPhrase-structure\n2\nsentence\n0.53\n40\n0.21\n0.03\n\n\nBase pairs, phrase-by-phrase\nPhrase-structure\n2\nphrase\n0.67\n39\n0.24\n0.04\n\n\nBase pairs, phrase-by-phrase\nPhrase-structure\n2\nsentence\n0.65\n39\n0.24\n0.04\n\n\nBase pairs, phrase-by-phrase\nControl\n2\nphrase\n0.62\n40\n0.21\n0.03\n\n\nBase pairs, phrase-by-phrase\nControl\n2\nsentence\n0.53\n40\n0.20\n0.03"
+  },
+  {
+    "objectID": "index.html#by-experiment",
+    "href": "index.html#by-experiment",
+    "title": "visual-phrase-structure",
+    "section": "By Experiment",
+    "text": "By Experiment\n\n\n# A tibble: 12 × 8\n   experiment   condition        session test     group_mean     n    sd    se\n   &lt;fct&gt;        &lt;ord&gt;            &lt;fct&gt;   &lt;fct&gt;         &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n 1 Experiment 1 Phrase-structure 1       phrase         0.74    60  0.21  0.03\n 2 Experiment 1 Phrase-structure 2       phrase         0.8     60  0.22  0.03\n 3 Experiment 1 Phrase-structure 2       sentence       0.72    60  0.19  0.02\n 4 Experiment 1 Control          1       phrase         0.53    58  0.18  0.02\n 5 Experiment 1 Control          2       phrase         0.58    58  0.18  0.02\n 6 Experiment 1 Control          2       sentence       0.6     58  0.15  0.02\n 7 Experiment 2 Phrase-structure 2       phrase         0.68    66  0.2   0.02\n 8 Experiment 2 Phrase-structure 2       sentence       0.57    66  0.2   0.02\n 9 Experiment 3 Phrase-structure 2       phrase         0.67    39  0.24  0.04\n10 Experiment 3 Phrase-structure 2       sentence       0.65    39  0.24  0.04\n11 Experiment 3 Control          2       phrase         0.62    40  0.21  0.03\n12 Experiment 3 Control          2       sentence       0.53    40  0.2   0.03"
+  },
+  {
+    "objectID": "index.html#phrase-test",
+    "href": "index.html#phrase-test",
+    "title": "visual-phrase-structure",
+    "section": "Phrase Test",
+    "text": "Phrase Test\n\nBy version\n\n\n\n\n\n\n\n\n\n\n\nBy experiment"
+  },
+  {
+    "objectID": "index.html#sentence-test",
+    "href": "index.html#sentence-test",
+    "title": "visual-phrase-structure",
+    "section": "Sentence Test",
+    "text": "Sentence Test\n\nBy version\n\n\n\n\n\n\n\n\n\n\n\nBy experiment"
+  },
+  {
+    "objectID": "index.html#phrase-test-1",
+    "href": "index.html#phrase-test-1",
+    "title": "visual-phrase-structure",
+    "section": "Phrase Test",
+    "text": "Phrase Test\nPhrase test performance is what we filtered by, so of course it’s good. I’m just including these results for completeness.\n\nBy version\n\n\n\n\n\n\n\n\n\n\n\nBy experiment"
+  },
+  {
+    "objectID": "index.html#sentence-test-1",
+    "href": "index.html#sentence-test-1",
+    "title": "visual-phrase-structure",
+    "section": "Sentence Test",
+    "text": "Sentence Test"
+  }
+]

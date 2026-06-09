@@ -1,0 +1,36 @@
+"1","                   participant  session            condition     indiv_mean     
+ 5ebe172a6d155d018177a84d:  5   1:118   Phrase-structure:394   Min.   :0.08333  
+ 60b1a6ceb8ed805efaa99650:  5   2:530   Control         :254   1st Qu.:0.50000  
+ 1                       :  3                                  Median :0.62500  
+ 10                      :  3                                  Mean   :0.64223  
+ 13                      :  3                                  3rd Qu.:0.75000  
+ 17                      :  3                                  Max.   :1.00000  
+ (Other)                 :626                                                   
+       test     version                                  name    
+ phrase  :383   v1 :198   Flying shapes, 1-shape window    :198  
+ sentence:265   v4 :156   Flying shapes, 2-shape window    :156  
+                v12: 30   Base pairs, static, complete grid: 54  
+                v13: 24   Base pairs, static, limited grid : 80  
+                v20: 80   Base pairs, phrase-by-phrase     :160  
+                v18:160                                          
+                                                                 
+        experiment  paradigm nback     materials                participants
+ Experiment 1:354   A:198    no :240   TN2x2:648   Haskins (In-person): 24  
+ Experiment 2:134   B:156    yes:408               Prolific           :624  
+ Experiment 3:160   E: 54                                                   
+                    F: 80                                                   
+                    H:160                                                   
+                                                                            
+                                                                            
+      days  
+ Min.   :2  
+ 1st Qu.:2  
+ Median :2  
+ Mean   :2  
+ 3rd Qu.:2  
+ Max.   :2  
+            
+"
+"1","`summarise()` has grouped output by 'experiment', 'name'. You can override using
+the `.groups` argument.
+"

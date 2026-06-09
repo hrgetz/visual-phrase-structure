@@ -1,0 +1,25 @@
+version,version_combined,name,experiment,paradigm,nback,materials,participants,days
+v1,v1,"Flying shapes, 1-shape window",Experiment 1,A,yes,TN2x2,Prolific,2
+v2,v2,,,A,yes,TNH,Prolific,2
+v3,v3,,,A,yes,TNH,Prolific,3
+v4,v4,"Flying shapes, 2-shape window",Experiment 1,B,yes,TN2x2,Prolific,2
+v5,v5,Looming shapes,Experiment 1,C,yes,TN2x2,Prolific,2
+v6,v6,,,D,yes,TN2x2,Georgetown (Online),1
+v7,v7,,,E,yes,TN2x2,Prolific,1
+v8,v8,,,E,yes,TN2x2,Prolific,2
+v9,v9,,,E,yes,TN2x2,Haskins (In-person),1
+v10,v10,,,E,no,TN2x2,Prolific,1
+v11,v11,,,E,yes,TN2x2,Prolific,1
+v12,v12,"Base pairs, static, complete grid",Experiment 2,E,yes,TN2x2,Prolific,2
+v13,v13,"Base pairs, static, complete grid",Experiment 2,E,yes,TN2x2,Haskins (In-person),2
+v14,v14,,,F,yes,TN2x2,Prolific,1
+v15,v15,,,G,yes,TN2x2,Prolific,1
+v16,v16,,,H,yes,TN2x2,Prolific,1
+v17,v17,,,H,no,TN2x2,Prolific,1
+v18,v18,"Base pairs, phrase-by-phrase",Experiment 3,H,no,TN2x2,Prolific,2
+v19,v19,,,H,yes,TN2x2,Prolific,2
+v20,v20,"Base pairs, static, limited grid",Experiment 2,F,no,TN2x2,Prolific,2
+v18_2,v18,"Base pairs, phrase-by-phrase",Experiment 3,H,no,TN2x2,Prolific,2
+v20_2,v20,"Base pairs, static, limited grid",Experiment 2,F,no,TN2x2,Prolific,2
+v21,v18,"Base pairs, phrase-by-phrase",Experiment 3,H,no,TN2x2,Prolific,2
+v21_2,v18,"Base pairs, phrase-by-phrase",Experiment 3,H,no,TN2x2,Prolific,2

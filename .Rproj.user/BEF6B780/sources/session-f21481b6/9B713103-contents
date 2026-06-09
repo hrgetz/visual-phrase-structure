@@ -1,0 +1,209 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Set up
+
+```{r}
+# set up ---------------------------
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE,error=TRUE)
+library(tidyverse)
+
+learning_cutoff <- .75
+
+# WRONG DATA FOR V5
+```
+
+```{r}
+versions_to_keep <- c("v1","v4","v5","v12", "v13","v18","v18_2","v20","v20_2", "v21","v21_2")
+version_order <- c("v1","v4","v5","v12", "v13", "v20","v18","v21")
+name_order <- c("Flying shapes, 1-shape window",
+                "Flying shapes, 2-shape window",
+                "Looming shapes",
+                "Base pairs, static, complete grid",
+                "Base pairs, static, limited grid",
+                "Base pairs, phrase-by-phrase")
+
+condition_order <- c("Phrase-structure","Control")
+factor_variables <- c("version","participant", "participants","session", "condition", "test", "paradigm", "nback", "materials", "test", "name", "experiment")
+
+version_info <- read.csv("tn_visual_version_summary.csv") %>%
+  filter(version %in% versions_to_keep) %>%
+  droplevels()
+
+raw_data <- read.csv("tn_visual_all_data.csv")
+
+data <- raw_data %>%
+  select(version:test)%>%
+  filter(version %in% versions_to_keep)%>%
+  filter(version !="v5")%>% # wrong data, need to replace
+  mutate(condition=case_match(condition,
+                              "ctl" ~ "Control",
+                              "control" ~ "Control",
+                              "exp" ~ "Phrase-structure",
+                              .default = condition))%>%
+  rename(indiv_mean=indivMean)%>%
+  arrange(version,participant)%>%
+  merge(version_info, by="version")%>%
+  select(-version)%>%
+  rename(version=version_combined)%>%
+  unique()%>%   # figure out why there are 40 extra rows. Data loaded twice???
+  mutate(across(all_of(factor_variables), as.factor))%>%
+  mutate(version=factor(version, version_order, ordered = TRUE))%>%
+  mutate(condition=factor(condition, condition_order, ordered = TRUE))%>%
+  mutate(name=factor(name, name_order, ordered = TRUE))%>%
+  droplevels()
+
+summary(data)
+
+data %>% select(experiment, name, condition, participant)%>%
+  unique()%>%
+  group_by(experiment, name, condition)%>%
+  summarise(n=length(participant))%>%
+  pivot_wider(names_from=condition, values_from=n)%>%
+  arrange(experiment)
+
+
+# label good learners
+
+good_learners <- data %>% spread(session,indiv_mean)%>%
+  rename("session_1" = "1", "session_2"="2")%>%
+  # update this for v4 since it had 3 days
+  mutate(session_last = ifelse(is.na(session_2),session_1,session_2))%>%
+  filter(test=="phrase")%>%
+  mutate(learning = ifelse(session_last >= learning_cutoff, "good","not good"))%>%
+  filter(learning=="good")%>%
+  droplevels()%>%
+  .$participant
+
+data$phrase_learning = ifelse(data$participant %in% good_learners,"good","not good")
+
+data %>% group_by(name,version, condition, phrase_learning) %>%
+  summarise(n = n_distinct(participant))%>%
+  pivot_wider(
+    names_from = phrase_learning,
+    values_from = n
+  )
+```
+
+```{r}
+# MEANS
+group_means <- data %>% 
+  group_by(paradigm, name, condition, session, test)%>%
+  summarise(group_mean = round(mean(indiv_mean),2), n = length(indiv_mean), sd = round(sd(indiv_mean),2))%>%
+  mutate(se = round(sd/sqrt(n),2))%>%
+  arrange(name, condition, session, test)%>%
+  ungroup()%>%
+  print()
+
+group_means_by_learner_performance <- data %>% 
+  group_by(paradigm, name, condition, session, test, phrase_learning)%>%
+  summarise(group_mean = round(mean(indiv_mean),2), n = length(indiv_mean), sd = round(sd(indiv_mean),2))%>%
+  mutate(se = round(sd/sqrt(n),2))%>%
+  arrange(name, condition, session, test)%>%
+  ungroup()%>%
+  print()
+
+group_means_by_experiment <- data %>% 
+  group_by(experiment, condition, session, test)%>%
+  summarise(group_mean = round(mean(indiv_mean),2), n = length(indiv_mean), sd = round(sd(indiv_mean),2))%>%
+  mutate(se = round(sd/sqrt(n),2))%>%
+  arrange(experiment, condition, session, test)%>%
+  ungroup()%>%
+  print()
+
+group_means_by_experiment_by_learner_performance <-  data %>% 
+  group_by(experiment, condition, session, test, phrase_learning)%>%
+  summarise(group_mean = round(mean(indiv_mean),2), n = length(indiv_mean), sd = round(sd(indiv_mean),2))%>%
+  mutate(se = round(sd/sqrt(n),2))%>%
+  arrange(experiment, condition, session, test)%>%
+  ungroup()%>%
+  print()
+```
+
+```{r}
+group_plot <- ggplot(filter(group_means, session=="2" & test=="phrase"), aes(x = condition, y = group_mean))+
+  geom_bar(stat = "identity", aes(fill = condition), color = "black",position=position_dodge(preserve="single"))+
+  geom_errorbar(aes(ymin = group_mean - se, ymax = group_mean + se), width = .25, position=position_dodge(width=.9, preserve="single"))+
+  geom_hline(yintercept = .5, linetype = "dashed", alpha = .5)+
+  ylim(0,1)+
+  scale_fill_brewer(palette="Set1")+
+  facet_wrap(~name, labeller = label_wrap_gen(width = 20))+
+  theme_bw()+
+  labs(title="Phrase Test (Day 2, all participants)")
+group_plot
+
+group_plot +
+    geom_dotplot(data = filter(data, session=="2" & test=="phrase"),
+                 aes(x = condition, y = indiv_mean, fill = condition), 
+                 alpha = .5, binaxis="y", stackdir="center")
+
+group_plot %+% filter(group_means, session=="2" & test=="sentence")+
+  geom_dotplot(data = filter(data, session=="2" & test=="sentence"),
+                 aes(x = condition, y = indiv_mean, fill = condition), 
+                 alpha = .5, binaxis="y", stackdir="center")+
+  labs(title="Sentence Test (Day 2, all participants)")
+
+```
+
+
+```{r}
+# good learners only
+
+group_plot %+% filter(group_means_by_learner_performance, 
+                      session=="2" & test=="phrase" & phrase_learning=="good")+
+  geom_dotplot(data = filter(data, session=="2" & test=="phrase" & phrase_learning=="good"),
+               aes(x = condition, y = indiv_mean, fill = condition), 
+               alpha = .5, binaxis="y", stackdir="center")+
+  labs(title="Phrase Test (Day 2, good learners only)")
+
+group_plot %+% filter(group_means_by_learner_performance, 
+                      session=="2" & test=="sentence" & phrase_learning=="good")+
+  geom_dotplot(data = filter(data, session=="2" & test=="sentence" & phrase_learning=="good"),
+               aes(x = condition, y = indiv_mean, fill = condition), 
+               alpha = .5, binaxis="y", stackdir="center")+
+  labs(title="Sentence Test (Day 2, good learners only)")
+```
+
+
+
+```{r}
+group_plot %+% filter(group_means_by_experiment, 
+                      session=="2" & test=="phrase") %+%
+  geom_dotplot(data = filter(data, session=="2" & test=="phrase"),
+               aes(x = condition, y = indiv_mean, fill = condition), 
+               alpha = .5, dotsize=.6, binaxis="y", stackdir="center")+
+  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
+  labs(title="Phrase Test (Day 2, all participants)")
+
+
+
+group_plot %+% filter(group_means_by_experiment, 
+                      session=="2" & test=="sentence") %+%
+  geom_dotplot(data = filter(data, session=="2" & test=="sentence"),
+               aes(x = condition, y = indiv_mean, fill = condition), 
+               alpha = .5, dotsize=.6, binaxis="y", stackdir="center")+
+  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
+  labs(title="Sentence Test (Day 2, all participants)")
+
+```
+```{r}
+group_plot %+% filter(group_means_by_experiment_by_learner_performance, 
+                      session=="2" & test=="phrase" & phrase_learning == "good") %+%
+  geom_dotplot(data = filter(data, session=="2" & test=="phrase" & phrase_learning=="good"),
+               aes(x = condition, y = indiv_mean, fill = condition), 
+               alpha = .5, dotsize=.6, binaxis ="y", stackdir="center")+
+  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
+  labs(title="Phrase Test (Day 2, good learners only)")
+
+
+group_plot %+% filter(group_means_by_experiment_by_learner_performance, 
+                      session=="2" & test=="sentence" & phrase_learning == "good") %+%
+  geom_dotplot(data = filter(data, session=="2" & test=="sentence" & phrase_learning=="good"),
+               aes(x = condition, y = indiv_mean, fill = condition), 
+               alpha = .5, dotsize=.6, binaxis ="y", stackdir="center")+
+  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
+  labs(title="Sentence Test (Day 2, good learners only)")
+```
+
