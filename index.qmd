@@ -6,7 +6,7 @@ title: "visual-phrase-structure"
 
 Here are our notes:
 
--   [Summary of experiments we will publish](https://georgetown.app.box.com/integrations/googledss/openGoogleEditor?fileId=2258144541563&trackingId=3&csrfToken=cacda77a37e3707c80b2980459144cbe6237610b91ff725c6231d47c86642d87#) (note: does not yet include the additional experiments that RA suggested including on Friday 6/5/26)
+-   [Summary of experiments we will publish](https://georgetown.box.com/s/nanuy5nxxuydx9vmlo06igssq9ht2nkj) (note: does not yet include the additional experiments that RA suggested including on Friday 6/5/26)
 -   [Full summary of all experiments](https://docs.google.com/document/d/162QLIBBQVdeLherblKcRbrBdSM18KBoe/edit#heading=h.mvxyavvrd69v)
 
 ```{r, include=FALSE}
@@ -112,7 +112,7 @@ data %>% select(experiment, name, version_combined, condition, participant) %>%
 
 ```{r}
 group_means <- data %>% 
-  group_by(name, condition, session, test)%>%
+  group_by(experiment, name, condition, session, test)%>%
   summarise(
     group_mean = mean(indiv_mean), 
     n = n(),
@@ -122,9 +122,6 @@ group_means <- data %>%
     se = sd/sqrt(n),
     across(c(group_mean, sd, se), ~round(.x, 2)))%>%
   arrange(name, condition, session, test)
-
-group_means %>% kable()
-
 
 group_means_by_experiment <- data %>% 
   group_by(experiment, condition, session, test)%>%
@@ -137,9 +134,6 @@ group_means_by_experiment <- data %>%
     se =sd/sqrt(n),
     across(c(group_mean, sd, se), ~round(.x, 2)))%>%
   arrange(experiment, condition, session, test)
-
-
-group_means_by_experiment %>% kable()
 ```
 
 ## Phrase Test
@@ -147,6 +141,12 @@ group_means_by_experiment %>% kable()
 ### By version
 
 ```{r}
+group_means %>% 
+  filter(test=="phrase")%>%
+  select(-test)%>%
+  kable()
+
+
 group_plot <- ggplot(
     filter(group_means, session=="2" & test=="phrase"), 
     aes(x = condition, y = group_mean))+
@@ -188,6 +188,11 @@ group_plot +
 ### By experiment
 
 ```{r}
+group_means_by_experiment %>%
+  filter(test=="phrase")%>%
+  select(-test)%>%
+  kable()
+
 group_plot %+%
   filter(group_means_by_experiment, session=="2" & test=="phrase")+
   facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
@@ -212,6 +217,11 @@ group_plot %+%
 ### By version
 
 ```{r}
+group_means %>% 
+  filter(test=="sentence")%>%
+  select(-test)%>%
+  kable()
+
 group_plot %+% 
   filter(group_means, session=="2" & test=="sentence")+
   geom_violin(
@@ -232,6 +242,11 @@ group_plot %+%
 ### By experiment
 
 ```{r}
+group_means_by_experiment %>%
+  filter(test=="sentence")%>%
+  select(-test)%>%
+  kable()
+
 group_plot %+%
   filter(group_means_by_experiment, session=="2" & test=="sentence")+
   facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
@@ -292,7 +307,7 @@ data %>%
 
 ```{r}
 group_means_by_learner_performance <- data %>% 
-  group_by(paradigm, name, condition, session, test, phrase_learning)%>%
+  group_by(name, condition, session, test, phrase_learning)%>%
   summarise(
     group_mean = mean(indiv_mean), 
     n = n(),
@@ -300,8 +315,8 @@ group_means_by_learner_performance <- data %>%
   mutate(
     se = sd/sqrt(n),
     across(c(group_mean, sd, se), ~round(.x, 2)))%>%
-  arrange(name, condition, session, test)%>%
-  print()
+  arrange(name, condition, session, test)
+
 
 group_means_by_experiment_by_learner_performance <-  data %>% 
   group_by(experiment, condition, session, test, phrase_learning)%>%
@@ -312,8 +327,7 @@ group_means_by_experiment_by_learner_performance <-  data %>%
   mutate(
     se = sd/sqrt(n),
     across(c(group_mean, sd, se), ~round(.x, 2)))%>%
-  arrange(experiment, condition, session, test)%>%
-  print()
+  arrange(experiment, condition, session, test)
 ```
 
 ## Phrase Test
@@ -323,6 +337,11 @@ Phrase test performance is what we filtered by, so of course it's good. I'm just
 ### By version
 
 ```{r}
+group_means_by_learner_performance %>%
+  filter(test=="phrase")%>%
+  select(-test)%>%
+  kable()
+
 group_plot %+%
   filter(group_means_by_learner_performance, session=="2" & test=="phrase" & phrase_learning=="good")+
   geom_violin(
@@ -344,6 +363,11 @@ group_plot %+%
 ### By experiment
 
 ```{r}
+group_means_by_experiment_by_learner_performance %>%
+  filter(test=="phrase")%>%
+  select(-test)%>%
+  kable()
+
 group_plot %+%
   filter(group_means_by_experiment_by_learner_performance, session=="2" & test=="phrase" & phrase_learning=="good")+
   facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
@@ -366,6 +390,12 @@ group_plot %+%
 ## Sentence Test
 
 ```{r}
+group_means_by_learner_performance %>%
+  filter(test=="sentence")%>%
+  select(-test)%>%
+  kable()
+
+
 group_plot %+%
   filter(group_means_by_learner_performance, session=="2" & test=="sentence" & phrase_learning=="good")+
   geom_violin(
@@ -384,6 +414,11 @@ group_plot %+%
 ```
 
 ```{r}
+group_means_by_experiment_by_learner_performance %>%
+  filter(test=="sentence")%>%
+  select(-test)%>%
+  kable()
+
 group_plot %+%
   filter(group_means_by_experiment_by_learner_performance, session=="2" & test=="sentence" & phrase_learning=="good")+
   facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
