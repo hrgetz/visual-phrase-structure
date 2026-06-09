@@ -107,168 +107,7 @@ data %>% select(experiment, name, version_combined, condition, participant) %>%
 # SOMEHOW, data for v21 (controls) got added twice, but only for some participants. i went directly into the data file 6/9/26 and deleted the extras, i think. 
 
 ```
-
-# Results: All learners
-
-```{r}
-group_means <- data %>% 
-  group_by(experiment, name, condition, session, test)%>%
-  summarise(
-    group_mean = mean(indiv_mean), 
-    n = n(),
-    sd = sd(indiv_mean),
-    .groups = "drop")%>%
-  mutate(
-    se = sd/sqrt(n),
-    across(c(group_mean, sd, se), ~round(.x, 2)))%>%
-  arrange(name, condition, session, test)
-
-group_means_by_experiment <- data %>% 
-  group_by(experiment, condition, session, test)%>%
-  summarise(
-    group_mean = mean(indiv_mean), 
-    n = n(), 
-    sd =sd(indiv_mean),
-    .groups = "drop")%>%
-  mutate(
-    se =sd/sqrt(n),
-    across(c(group_mean, sd, se), ~round(.x, 2)))%>%
-  arrange(experiment, condition, session, test)
-```
-
-## Phrase Test
-
-### By version
-
-```{r}
-group_means %>% 
-  filter(test=="phrase")%>%
-  select(-test)%>%
-  kable()
-
-
-group_plot <- ggplot(
-    filter(group_means, session=="2" & test=="phrase"), 
-    aes(x = condition, y = group_mean))+
-  geom_bar(
-    stat = "identity", 
-    aes(fill = condition), 
-    color = "black",
-    position=position_dodge(preserve="single"))+
-  geom_errorbar(
-    aes(ymin = group_mean - se, ymax = group_mean + se), 
-    width = .25, 
-    position=position_dodge(width=.9, preserve="single"))+
-  geom_hline(yintercept = .5, linetype = "dashed", alpha = .5)+
-  ylim(0,1)+
-  scale_fill_brewer(palette="Set1")+
-  facet_wrap(~name, labeller = label_wrap_gen(width = 20))+
-  theme_bw()
-
-#group_plot
-
-group_plot +
-  geom_violin(
-    data = filter(data, session =="2" & test == "phrase"),
-    aes(x = condition, y = indiv_mean, fill = condition),
-    alpha = .2,
-    color = "grey"
-  )+
-  geom_dotplot(
-    data = filter(data, session=="2" & test=="phrase"),
-    aes(x = condition, y = indiv_mean, fill = condition), 
-    alpha = .2, 
-    binaxis="y", 
-    stackdir="center")+
-  labs(title="Phrase Test (Day 2, all participants)")
-
-
-```
-
-### By experiment
-
-```{r}
-group_means_by_experiment %>%
-  filter(test=="phrase")%>%
-  select(-test)%>%
-  kable()
-
-group_plot %+%
-  filter(group_means_by_experiment, session=="2" & test=="phrase")+
-  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
-  geom_violin(
-    data = filter(data, session =="2" & test == "phrase"),
-    aes(x = condition, y = indiv_mean, fill = condition),
-    alpha = .2,
-    color = "grey"
-  )+
-  geom_dotplot(
-    data = filter(data, session=="2" & test=="phrase"),
-    aes(x = condition, y = indiv_mean, fill = condition), 
-    alpha = .2, 
-    dotsize = .5,
-    binaxis="y", 
-    stackdir="center")+
-  labs(title="Phrase Test (Day 2, all participants)")
-```
-
-## Sentence Test
-
-### By version
-
-```{r}
-group_means %>% 
-  filter(test=="sentence")%>%
-  select(-test)%>%
-  kable()
-
-group_plot %+% 
-  filter(group_means, session=="2" & test=="sentence")+
-  geom_violin(
-    data = filter(data, session =="2" & test == "sentence"),
-    aes(x = condition, y = indiv_mean, fill = condition),
-    alpha = .2,
-    color = "grey"
-  )+  
-  geom_dotplot(
-    data = filter(data, session=="2" & test=="sentence"),
-    aes(x = condition, y = indiv_mean, fill = condition), 
-    alpha = .2, 
-    binaxis="y", 
-    stackdir="center")+
-  labs(title="Sentence Test (Day 2, all participants)")
-```
-
-### By experiment
-
-```{r}
-group_means_by_experiment %>%
-  filter(test=="sentence")%>%
-  select(-test)%>%
-  kable()
-
-group_plot %+%
-  filter(group_means_by_experiment, session=="2" & test=="sentence")+
-  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
-  geom_violin(
-    data = filter(data, session =="2" & test == "sentence"),
-    aes(x = condition, y = indiv_mean, fill = condition),
-    alpha = .2,
-    color = "grey"
-  )+
-  geom_dotplot(
-    data = filter(data, session=="2" & test=="sentence"),
-    aes(x = condition, y = indiv_mean, fill = condition), 
-    alpha = .2, 
-    dotsize = .5,
-    binaxis="y", 
-    stackdir="center")+
-  labs(title="Sentence Test (Day 2, all participants)")
-```
-
-# Results: Good learners
-
-### Defining "good learners"
+## Defining "good learners"
 
 Throughout the project, we've looked at results for everyone combined and also only for "good learners", defined as people who surpassed a certain threshold on the phrase test. We thought this was necessary because we didn't always have an attention check built into the paradigm.
 
@@ -305,36 +144,108 @@ data %>%
   kable()
 ```
 
+# Results
+
 ```{r}
+group_means <- data %>% 
+  group_by(experiment, name, condition, session, test)%>%
+  summarise(
+    group_mean = mean(indiv_mean), 
+    n = n(),
+    sd = sd(indiv_mean),
+    .groups = "drop")%>%
+  mutate(
+    se = sd/sqrt(n),
+    across(c(group_mean, sd, se), ~round(.x, 2)))%>%
+  arrange(name, condition, session, test)
+
 group_means_by_learner_performance <- data %>% 
   group_by(name, condition, session, test, phrase_learning)%>%
   summarise(
     group_mean = mean(indiv_mean), 
     n = n(),
-    sd = sd(indiv_mean))%>%
+    sd = sd(indiv_mean),
+    .groups = "drop")%>%
   mutate(
     se = sd/sqrt(n),
     across(c(group_mean, sd, se), ~round(.x, 2)))%>%
   arrange(name, condition, session, test)
 
 
+group_means_by_experiment <- data %>% 
+  group_by(experiment, condition, session, test)%>%
+  summarise(
+    group_mean = mean(indiv_mean), 
+    n = n(), 
+    sd =sd(indiv_mean),
+    .groups = "drop")%>%
+  mutate(
+    se =sd/sqrt(n),
+    across(c(group_mean, sd, se), ~round(.x, 2)))%>%
+  arrange(experiment, condition, session, test)
+
 group_means_by_experiment_by_learner_performance <-  data %>% 
   group_by(experiment, condition, session, test, phrase_learning)%>%
   summarise(
     group_mean = mean(indiv_mean), 
     n = n(),
-    sd = sd(indiv_mean))%>%
+    sd = sd(indiv_mean),
+    .groups = "drop")%>%
   mutate(
     se = sd/sqrt(n),
     across(c(group_mean, sd, se), ~round(.x, 2)))%>%
   arrange(experiment, condition, session, test)
+
+
 ```
 
 ## Phrase Test
 
-Phrase test performance is what we filtered by, so of course it's good. I'm just including these results for completeness.
-
 ### By version
+
+Here are the results for all participants:
+
+```{r}
+group_means %>% 
+  filter(test=="phrase")%>%
+  select(-test)%>%
+  kable()
+
+group_plot <- ggplot(
+    filter(group_means, session=="2" & test=="phrase"), 
+    aes(x = condition, y = group_mean))+
+  geom_bar(
+    stat = "identity", 
+    aes(fill = condition), 
+    color = "black",
+    position=position_dodge(preserve="single"))+
+  geom_errorbar(
+    aes(ymin = group_mean - se, ymax = group_mean + se), 
+    width = .25, 
+    position=position_dodge(width=.9, preserve="single"))+
+  geom_hline(yintercept = .5, linetype = "dashed", alpha = .5)+
+  ylim(0,1)+
+  scale_fill_brewer(palette="Set1")+
+  facet_wrap(~name, labeller = label_wrap_gen(width = 20))+
+  theme_bw()
+
+group_plot +
+  geom_violin(
+    data = filter(data, session =="2" & test == "phrase"),
+    aes(x = condition, y = indiv_mean, fill = condition),
+    alpha = .2,
+    color = "grey"
+  )+
+  geom_dotplot(
+    data = filter(data, session=="2" & test=="phrase"),
+    aes(x = condition, y = indiv_mean, fill = condition), 
+    alpha = .2, 
+    binaxis="y", 
+    stackdir="center")+
+  labs(title="Phrase Test (Day 2, all participants)")
+```
+
+Here are the results broken down by performance on the phrase test. Obviously, since we used performance on the phrase test to classify participants, phrase test performance will differ across these groups. I'm including these results just for completeness. 
 
 ```{r}
 group_means_by_learner_performance %>%
@@ -357,11 +268,36 @@ group_plot %+%
     binaxis="y", 
     stackdir="center")+
   labs(title="Phrase Test (Day 2, 'good learners' only)")
-
 ```
 
 ### By experiment
 
+```{r}
+group_means_by_experiment %>%
+  filter(test=="phrase")%>%
+  select(-test)%>%
+  kable()
+
+group_plot %+%
+  filter(group_means_by_experiment, session=="2" & test=="phrase")+
+  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
+  geom_violin(
+    data = filter(data, session =="2" & test == "phrase"),
+    aes(x = condition, y = indiv_mean, fill = condition),
+    alpha = .2,
+    color = "grey"
+  )+
+  geom_dotplot(
+    data = filter(data, session=="2" & test=="phrase"),
+    aes(x = condition, y = indiv_mean, fill = condition), 
+    alpha = .2, 
+    dotsize = .5,
+    binaxis="y", 
+    stackdir="center")+
+  labs(title="Phrase Test (Day 2, all participants)")
+```
+
+Good learners only:
 ```{r}
 group_means_by_experiment_by_learner_performance %>%
   filter(test=="phrase")%>%
@@ -389,13 +325,41 @@ group_plot %+%
 
 ## Sentence Test
 
+### By version
+
+```{r}
+group_means %>% 
+  filter(test=="sentence")%>%
+  select(-test)%>%
+  kable()
+
+group_plot %+% 
+  filter(group_means, session=="2" & test=="sentence")+
+  geom_violin(
+    data = filter(data, session =="2" & test == "sentence"),
+    aes(x = condition, y = indiv_mean, fill = condition),
+    alpha = .2,
+    color = "grey"
+  )+  
+  geom_dotplot(
+    data = filter(data, session=="2" & test=="sentence"),
+    aes(x = condition, y = indiv_mean, fill = condition), 
+    alpha = .2, 
+    binaxis="y", 
+    stackdir="center")+
+  labs(title="Sentence Test (Day 2, all participants)")
+```
+Broken down by learner type:
+
 ```{r}
 group_means_by_learner_performance %>%
   filter(test=="sentence")%>%
   select(-test)%>%
   kable()
+```
 
-
+Good learners only:
+```{r}
 group_plot %+%
   filter(group_means_by_learner_performance, session=="2" & test=="sentence" & phrase_learning=="good")+
   geom_violin(
@@ -412,6 +376,35 @@ group_plot %+%
     stackdir="center")+
   labs(title="Sentence Test (Day 2, 'good learners' only)")
 ```
+
+
+### By experiment
+
+```{r}
+group_means_by_experiment %>%
+  filter(test=="sentence")%>%
+  select(-test)%>%
+  kable()
+
+group_plot %+%
+  filter(group_means_by_experiment, session=="2" & test=="sentence")+
+  facet_wrap(~experiment, labeller = label_wrap_gen(width = 20))+
+  geom_violin(
+    data = filter(data, session =="2" & test == "sentence"),
+    aes(x = condition, y = indiv_mean, fill = condition),
+    alpha = .2,
+    color = "grey"
+  )+
+  geom_dotplot(
+    data = filter(data, session=="2" & test=="sentence"),
+    aes(x = condition, y = indiv_mean, fill = condition), 
+    alpha = .2, 
+    dotsize = .5,
+    binaxis="y", 
+    stackdir="center")+
+  labs(title="Sentence Test (Day 2, all participants)")
+```
+Good learners only:
 
 ```{r}
 group_means_by_experiment_by_learner_performance %>%
@@ -436,4 +429,5 @@ group_plot %+%
     binaxis="y", 
     stackdir="center")+
   labs(title="Sentence Test (Day 2, 'good learners' only)")
+
 ```
