@@ -3,7 +3,7 @@
     "path": "~/visual-phrase-structure/index.qmd",
     "project_path": "index.qmd",
     "type": "quarto_markdown",
-    "hash": "1214278747",
+    "hash": "806661431",
     "contents": "",
     "dirty": false,
     "created": 1781008948421.0,
@@ -17,15 +17,15 @@
         "docOutlineVisible": "1",
         "rmdVisualCollapsedChunks": "1,8025",
         "rmdVisualModeLocation": "7597:7261.81787109375",
-        "cursorPosition": "354,38",
-        "scrollLine": "351"
+        "cursorPosition": "4,44",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1781016683,
+    "lastKnownWriteTime": 1781017393,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1781016718296,
+    "last_content_update": 1781017393074,
     "read_only": false,
     "read_only_alternatives": []
 }
