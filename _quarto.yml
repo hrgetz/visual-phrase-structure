@@ -8,6 +8,7 @@ website:
 format:
   html:
     code-fold: true
+    downloads: [pdf]
     css: styles.css
     toc: true
 

@@ -6,8 +6,8 @@ title: "visual-phrase-structure"
 
 Here are our notes:
 
--   Summary of experiments we will publish
--   All experiments
+-   [Summary of experiments we will publish](https://georgetown.app.box.com/integrations/googledss/openGoogleEditor?fileId=2258144541563&trackingId=3&csrfToken=cacda77a37e3707c80b2980459144cbe6237610b91ff725c6231d47c86642d87#) (note: does not yet include the additional experiments that RA suggested including on Friday 6/5/26)
+-   [Full summary of all experiments](https://docs.google.com/document/d/162QLIBBQVdeLherblKcRbrBdSM18KBoe/edit#heading=h.mvxyavvrd69v)
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -207,7 +207,7 @@ group_plot %+%
   labs(title="Phrase Test (Day 2, all participants)")
 ```
 
-## Sentence Test 
+## Sentence Test
 
 ### By version
 
