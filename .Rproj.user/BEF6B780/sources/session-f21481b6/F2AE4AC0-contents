@@ -4,10 +4,15 @@ title: "visual-phrase-structure"
 
 # Overview
 
-Here are our notes:
+This is the most recent version of Heidi's analysis of the visual phrase structure data. It includes a brief summary of the design. For additional details and figures, please refer to the [summary document that I sent in June 2026](https://georgetown.box.com/s/nanuy5nxxuydx9vmlo06igssq9ht2nkj).
 
--   [Summary of experiments we will publish](https://georgetown.box.com/s/nanuy5nxxuydx9vmlo06igssq9ht2nkj) (note: does not yet include the additional experiments that RA suggested including on Friday 6/5/26)
--   [Full summary of all experiments](https://docs.google.com/document/d/162QLIBBQVdeLherblKcRbrBdSM18KBoe/edit#heading=h.mvxyavvrd69v)
+## Summary
+
+**Miniature language.** We used a miniature language grammar with four form-class categories (A, B, C, and D), each containing two shapes. There was a basic sentence structure ABCD. Depending on the experiment, this was either a sequence of shapes or a particular spatial arrangement of shapes. Additional sequences/arrangements were created by moving, repeating, or deleting pairs of shapes from the basic ABCD structure. In the phrase-structure condition, these pairs of words were consistent (either AB or CD) while in the control condition these pairs of words were less consistent (AB, BC, CD, DA). This manipulation created distributional cues to phrase groupings in the phrase-structure condition, but not the control condition. 
+
+**Test.** We had two types of 2AFC test items. On the phrase test, participants chose between a group of shapes that formed a phrase (AB) and a grammatical sequence/shape arrangement that spanned a phrase boundary (BC). Accuracy was measured as choice of the phrase. On the sentence test, participants chose between a novel ABCD sequence/scene and the same sequence/scene with one shape replaced (e.g., \*ABBD).
+
+**Paradigms.** Across experiments, we manipulated the way that the materials were presented to participants: either as a visual sequence of shapes, or as “base pairs” in a consistent spatial arrangement.See below for more details about the specific paradigms.
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -83,16 +88,16 @@ summary(data)
 
 ```
 
-## Ns by experiment
+**Participants**. We decided to publish the following experiments. A few Ns are different from what is in our other summary sheets because I discovered that a couple of participants were run in multiple experiments. I removed data for all but the first experiment they participated in.
 
-Here are the experiments we're going to publish, with Ns. A few Ns are different. from what's in our summary sheets because I discovered that a couple of participants were run in multiple experiments. I removed data for all but the first experiment they participated in.
+Results for v5 are not yet in here, I'm working on it.
 
 ```{r}
-data %>% select(experiment, name, version_combined, condition, participant) %>%
+data %>% select(experiment, name, version, condition, participant) %>%
   unique()%>%
   group_by(experiment, name, condition)%>%
   summarise(
-    versions = paste(sort(unique(version_combined)), collapse = ", "),
+    versions = paste(sort(unique(version)), collapse = ", "),
     n = n_distinct(participant),
     .groups = "drop")%>%
   pivot_wider(
@@ -106,6 +111,7 @@ data %>% select(experiment, name, version_combined, condition, participant) %>%
 # SOMEHOW, data for v21 (controls) got added twice, but only for some participants. i went directly into the data file 6/9/26 and deleted the extras, i think. 
 
 ```
+
 ## Defining "good learners"
 
 Throughout the project, we've looked at results for everyone combined and also only for "good learners", defined as people who surpassed a certain threshold on the phrase test. We thought this was necessary because we didn't always have an attention check built into the paradigm.
@@ -144,6 +150,8 @@ data %>%
 ```
 
 # Results
+
+Results differed for the phrase test and the sentence test. This is what I think we should focus on. The most interesting contrast is these two experiments on the sentence test: Base Pairs, Static vs Base Pairs, Phrase-by-Phrase.
 
 ```{r}
 group_means <- data %>% 
@@ -200,6 +208,8 @@ group_means_by_experiment_by_learner_performance <-  data %>%
 
 ## Phrase Test
 
+Participants in the phrase-structure condition consistently did well on the phrase test, regardless of the paradigm. \[Note: I haven’t run any stats yet, so this is just descriptive.\] Performance was highest in the sequence paradigms (flying shapes) and a bit lower, but still pretty good, for the “simultaneous” paradigms (base pairs). The only experiment in which the phrase-structure condition was NOT substantially better than the control condition was the one in which scenes unfolded two shapes at a time (base pairs, phrase-by-phrase). 
+
 ### By version
 
 Here are the results for all participants:
@@ -244,7 +254,7 @@ group_plot +
   labs(title="Phrase Test (Day 2, all participants)")
 ```
 
-Here are the results broken down by performance on the phrase test. Obviously, since we used performance on the phrase test to classify participants, phrase test performance will differ across these groups. I'm including these results just for completeness. 
+Here are the results broken down by performance on the phrase test. Obviously, since we used performance on the phrase test to classify participants, phrase test performance will differ across these groups. I'm including these results just for completeness.
 
 ```{r}
 group_means_by_learner_performance %>%
@@ -297,6 +307,7 @@ group_plot %+%
 ```
 
 Good learners only:
+
 ```{r}
 group_means_by_experiment_by_learner_performance %>%
   filter(test=="phrase")%>%
@@ -324,6 +335,18 @@ group_plot %+%
 
 ## Sentence Test
 
+Here’s where the results differed by paradigm. The most interesting contrast is Base Pairs, Static vs. Base Pairs, phrase-by-phrase.
+
+In the sequence paradigms, participants in the phrase-structure condition did fine on the sentence test, and better than controls.
+
+In our first base pair paradigm, when we presented the full scene all at once (base pairs, static), participants in the phrase-structure condition were terrible at the sentence test, even though they had done well on the phrase test (see above). We didn’t bother running a control condition here.
+
+When we had those same scenes unfold two shapes at a time (base pairs, phrase-by-phrase), performance on the sentence test went back up in the phrase-structure condition. However, the controls were still at chance.
+
+Here’s one way to frame this: With sequenced presentation of these materials, people learn fine. With fully simultaneous (static) presentation, people learn the phrase groupings ok, but they don’t learn the sentence structure. To get people to learn the sentence structure, you need to make the simultaneous presentation unfold sequentially.
+
+(Note: After getting the results for phrase-by-phrase presentation, we ran another batch of participants on static presentation, just to confirm the results. They replicated. The figure shows combined results from the original run and the re-run.)
+
 ### By version
 
 ```{r}
@@ -348,6 +371,7 @@ group_plot %+%
     stackdir="center")+
   labs(title="Sentence Test (Day 2, all participants)")
 ```
+
 Broken down by learner type:
 
 ```{r}
@@ -357,7 +381,8 @@ group_means_by_learner_performance %>%
   kable()
 ```
 
-Good learners only:
+**Good learners only:** Here are the results for the sentence test if we look just at people whose phrase test accuracy was ≥ `r learning_cutoff`. Performance by the phrase structure group in the Base Pairs, Static experiment is equivalent to performance by the control group in the Base pairs, Phrase-by-Phrase experiment.
+
 ```{r}
 group_plot %+%
   filter(group_means_by_learner_performance, session=="2" & test=="sentence" & phrase_learning=="good")+
@@ -375,7 +400,6 @@ group_plot %+%
     stackdir="center")+
   labs(title="Sentence Test (Day 2, 'good learners' only)")
 ```
-
 
 ### By experiment
 
@@ -403,6 +427,7 @@ group_plot %+%
     stackdir="center")+
   labs(title="Sentence Test (Day 2, all participants)")
 ```
+
 Good learners only:
 
 ```{r}
